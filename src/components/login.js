@@ -133,18 +133,17 @@ passwordShowHide=()=>{
 						    <Form.Control value={this.state.password} onChange={(e)=>{this.setState({password:e.target.value})}} type="password" placeholder="Enter password" id="password"/>
 						    <button id="showHideBtn" onClick={this.passwordShowHide} type="button" className="btn mt-0"><i class="fa fa-eye"/> Show Password</button>
 						  </Form.Group>
-
-						  <Button variant="success" className="btn-block mb-2" type="submit">
+						  <Form.Group className="mb-3" controlId="formBasicCheckbox">
+							<Form.Check type="checkbox" onChange={this.RememberOnChange} defaultChecked={this.state.isChecked} className="text-primary" label="Remember me" />
+						   </Form.Group>
+						  <Button variant="success" className="btn-block mb-1" type="submit">
 						    Login	
 						  </Button>
 						  <Form.Group>
-						   	<Form.Label className="remember-me">
-						   		<input onChange={this.RememberOnChange} type="checkbox" defaultChecked={this.state.isChecked}/> <span className="text-primary">Remember me </span>
-						   	</Form.Label> 
 						   	<Link to="/email_verification">
 						    		<p className="forget-pass">Forgotten Password?</p> 
 						    </Link>
-						  </Form.Group>
+						  </Form.Group><br/><br/>
 						   
 					</Form>
  			</Container>

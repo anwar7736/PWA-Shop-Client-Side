@@ -33,74 +33,53 @@ class CurrentStockList extends React.Component{
 
  	return(
  		<Fragment>
- 			  <Container className="animated zoomIn transaction-preview">
-
-                    <Row className="mt-2">
-                        <Col sm={12} xs={12} md={12} lg={12}>
-                            <Card>
-                                <Card.Body>
-                                    <Container fluid={true}>
-                                        <Row>
-                                            
-                                            <Col><h4 className="heading-title text-danger">Current Stock</h4></Col>
-                                        <div className="no-print">  
-                                        <ReactHTMLTableToExcel  
-                                                className="btn btn-success btn-sm"  
-                                                table="export-excel"  
-                                                filename="Current Stock"  
-                                                sheet="Sheet"  
-                                                buttonText="Save As Excel" />  
-                                            <button onClick={this.print} className="btn btn-danger ml-3 btn-sm">Print</button>
-                                        </div>  
-
-                                        </Row>
-
-
-                                    </Container>
-                                    <hr className="bg-secondary"/>
-                                    <Container fluid={true}>
-                                        <Row>
-                                            <Col sm={12} xs={12} md={12} lg={12}> 
-                                               <table className="table table-borderd table-striped" id="export-excel">
-                                                   <thead className="bg-light">
-                                                        <h5 className="text-success heading-subtitle">Total Stock : {this.state.total}TK</h5>
-                                                        <tr>
-                                                            <th>Image</th>
-                                                            <th>Product Code</th>
-                                                            <th>Product Name</th>
-                                                            <th>Category</th>
-                                                            <th>Unit Price</th>
-                                                            <th>Available Qty</th>
-                                                            <th>Total Price</th>
+ 			  <div className=" text-white container-fluid mt-4">
+               <h3 className=" mr-2 text-danger heading-title text-center">Current Stock</h3>           
+                    <div className="no-print">  
+                    <ReactHTMLTableToExcel  
+                            className="btn btn-success btn-sm"  
+                            table="export-excel"  
+                            filename="Current Stock"  
+                            sheet="Sheet"  
+                            buttonText="Save As Excel" />  
+                        <button onClick={this.print} className="btn btn-danger ml-3 btn-sm">Print</button>
+                    </div>  
+                        <hr className="bg-secondary"/>
+                                    <table className="table table-borderd table-striped" id="export-excel">
+                                        <thead className="bg-light">
+                                            <h5 className="text-success heading-subtitle">Total Stock : {this.state.total}TK</h5>
+                                            <tr>
+                                                <th>Image</th>
+                                                <th>Product Code</th>
+                                                <th>Product Name</th>
+                                                <th>Category</th>
+                                                <th>Unit</th>
+                                                <th>Qty</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                            this.state.dataTable.map((List, i)=>{
+                                                return  <tr>
+                                                            <td><img className="cat-icon" src={List.product_icon}/></td>
+                                                            <td>{List.product_code}</td>
+                                                            <td>{List.product_name}</td>
+                                                            <td>{List.product_category}</td>
+                                                            <td>{List.product_price}</td>
+                                                            <td>{List.product_qty}</td>
+                                                            <td>{List.total_price}</td>
                                                         </tr>
-                                                   </thead>
-                                                   <tbody>
-                                                       {
-                                                        this.state.dataTable.map((List, i)=>{
-                                                            return  <tr>
-                                                                        <td><img className="cat-icon" src={List.product_icon}/></td>
-                                                                        <td>{List.product_code}</td>
-                                                                        <td>{List.product_name}</td>
-                                                                        <td>{List.product_category}</td>
-                                                                        <td>{List.product_price}</td>
-                                                                        <td>{List.product_qty}</td>
-                                                                        <td>{List.total_price}</td>
-                                                                    </tr>
-                                                        })
-                                                       }
-                                                   </tbody>
-                                                 
-                                               </table>  
-
-                                            </Col>
-                                        </Row>
-
-                                    </Container>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    </Row>
-                </Container>
+                                            })
+                                            }
+                                        </tbody>
+                                        
+                                    </table>  
+                                    
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
  		</Fragment>
  		)
  }

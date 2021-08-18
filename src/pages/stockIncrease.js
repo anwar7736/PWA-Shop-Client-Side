@@ -13,6 +13,7 @@ class StockIncrease extends React.Component{
  render(){
     return(
         <Fragment>
+            <title>Stock Received</title>
             <NavBar/>
             <Increase/>
             <Footer/>

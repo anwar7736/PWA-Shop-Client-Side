@@ -13,6 +13,7 @@ class Reports extends React.Component{
  render(){
  	return(
  		<Fragment>
+             <title>Sales Report</title>
  			<NavBar/>
  			<ReportList/>
  			<div className="no-print">

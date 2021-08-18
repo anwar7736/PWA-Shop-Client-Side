@@ -56,90 +56,66 @@ class StockReceivedList extends React.Component{
 
  	return(
  		<Fragment>
- 			  <Container className="animated zoomIn transaction-preview">
+ 			  <div className="container-fluid animated zoomIn transaction-preview">
+                    <h3 className="heading-title text-danger text-center">Stock Received Report</h3>  
+                    <div className="no-print">  
+                    <ReactHTMLTableToExcel  
+                            className="btn btn-info btn-sm"  
+                            table="export-excel"  
+                            filename="Stock Received"  
+                            sheet="Sheet"  
+                            buttonText="Save As Excel" /> 
+                        <button onClick={this.print} className="btn btn-dark ml-3 btn-sm">Print Report</button> 
+                    </div>  
+                    <br/>
+                <div className="no-print">
+                    <div className="input-group">
+                        <input id="from_date" className="w-25 form-control form-control-sm mx-2" type="date"/>
+                        <input id="to_date" className="w-25 form-control form-control-sm mx-2" type="date"/>
+                        <button onClick={this.filterByDate} className="btn btn-sm btn-success mx-2">Filter</button>
+                        <button onClick={this.resetForm} className="btn btn-sm btn-danger mx-2">Refresh</button>
+                    </div>
+                </div>
+                <hr className="bg-secondary"/>
+                        <table className="table table-borderd table-striped" id="export-excel">
+                        <thead className="bg-light">
+                                <div className="col-md-12 w-100">
+                                    <h5 className="heading-subtitle text-success">Total : {this.state.total}TK</h5>
+                                </div>
+                            <tr>
+                                <th width="20%">Invoice No</th>
+                                <th width="20%">Received Date</th>
+                                <th>Product Code</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Unit</th>
+                                <th>Qty</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                            this.state.dataTable.map((List, i)=>{
+                                return  <tr>
+                                            <td>{List.invoice_no}</td>
+                                            <td>{List.received_date}</td>
+                                            <td>{List.product_code}</td>
+                                            <td>{List.product_name}</td>
+                                            <td>{List.product_category}</td>
+                                            <td>{List.product_unit_price}</td>
+                                            <td>{List.product_qty}</td>
+                                            <td>{List.product_total_price}</td>
+                                        </tr>
+                            })
+                            }
+                        </tbody>
+                        
+                    </table>  
+                </div>          
+                <br/>
+                <br/>
+                <br/>
 
-                    <Row className="mt-2">
-                        <Col sm={12} xs={12} md={12} lg={12}>
-                            <Card>
-                                <Card.Body>
-                                    <Container fluid={true}>
-                                        <Row>
-                                            <Col md={3} sm={12}>
-                                                <h4 className="heading-title text-danger">Stock Received Report</h4>  
-                                            </Col>
-                                            <Col md={3} sm={12}>
-                                                <div className="no-print">  
-                                                <ReactHTMLTableToExcel  
-                                                        className="btn btn-info btn-sm"  
-                                                        table="export-excel"  
-                                                        filename="Stock Received"  
-                                                        sheet="Sheet"  
-                                                        buttonText="Save As Excel" /> 
-                                                    <button onClick={this.print} className="btn btn-dark ml-3 btn-sm">Print</button> 
-                                                </div>  
-                                            </Col>
-                                          
-                                            <Col md={6} sm={12} className="no-print">
-                                                <div className="input-group">
-                                                    <input id="from_date" className="form-control form-control-sm mx-2" type="date"/>
-                                                    <input id="to_date" className="form-control form-control-sm mx-2" type="date"/>
-                                                    <button onClick={this.filterByDate} className="btn btn-sm btn-success mx-2">Filter</button>
-                                                    <button onClick={this.resetForm} className="btn btn-sm btn-danger mx-2">Refresh</button>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </Container>
-                                    <hr className="bg-secondary"/>
-                                    <Container fluid={true}>
-                                        <Row>
-                                        
-                                            <Col sm={12} xs={12} md={12} lg={12}>
-                                                 <table className="table table-borderd table-striped" id="export-excel">
-                                                   <thead className="bg-light">
-                                           
-                                                            <div className="col-md-12 w-100">
-                                                                <h5 className="heading-subtitle text-success">Total : {this.state.total}TK</h5>
-                                                            </div>
-                                         
-                                                        <tr>
-                                                            <th width="20%">Invoice No</th>
-                                                            <th width="20%">Received Date</th>
-                                                            <th>Product Code</th>
-                                                            <th>Product Name</th>
-                                                            <th>Category</th>
-                                                            <th>Unit Price</th>
-                                                            <th>Available Qty</th>
-                                                            <th>Total Price</th>
-                                                        </tr>
-                                                   </thead>
-                                                   <tbody>
-                                                       {
-                                                        this.state.dataTable.map((List, i)=>{
-                                                            return  <tr>
-                                                                       
-                                                                        <td>{List.invoice_no}</td>
-                                                                        <td>{List.received_date}</td>
-                                                                        <td>{List.product_code}</td>
-                                                                        <td>{List.product_name}</td>
-                                                                        <td>{List.product_category}</td>
-                                                                        <td>{List.product_unit_price}</td>
-                                                                        <td>{List.product_qty}</td>
-                                                                        <td>{List.product_total_price}</td>
-                                                                    </tr>
-                                                        })
-                                                       }
-                                                   </tbody>
-                                                 
-                                               </table>  
-
-                                            </Col>
-                                        </Row>
-                                    </Container>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    </Row>
-                </Container>
  		</Fragment>
  		)
  }

@@ -56,90 +56,71 @@ class StockDecreaseList extends React.Component{
 
     return(
         <Fragment>
-              <Container className="animated zoomIn transaction-preview">
+              <div className="container-fluid animated zoomIn transaction-preview">
+                    <h3 className="heading-title text-danger text-center">Stock Decrease Report</h3>  
 
-                    <Row className="mt-2">
-                        <Col sm={12} xs={12} md={12} lg={12}>
-                            <Card>
-                                <Card.Body>
-                                    <Container fluid={true}>
-                                        <Row>
-                                            <Col md={3} sm={12}>
-                                                <h5 className="heading-title text-danger">Stock Decrease Report</h5>  
-                                            </Col>
-                                            <Col md={3} sm={12}>
-                                                <div className="no-print">  
-                                                <ReactHTMLTableToExcel  
-                                                        className="btn btn-site btn-sm"  
-                                                        table="export-excel"  
-                                                        filename="Stock Decrease"  
-                                                        sheet="Sheet"  
-                                                        buttonText="Save As Excel" /> 
-                                                    <button onClick={this.print} className="btn btn-info ml-3 btn-sm">Print</button> 
-                                                </div>  
-                                            </Col>
-                                          
-                                            <Col md={6} sm={12} className="no-print">
-                                                <div className="input-group">
-                                                    <input id="from_date" className="form-control form-control-sm mx-2" type="date"/>
-                                                    <input id="to_date" className="form-control form-control-sm mx-2" type="date"/>
-                                                    <button onClick={this.filterByDate} className="btn btn-sm btn-success mx-2">Filter</button>
-                                                    <button onClick={this.resetForm} className="btn btn-sm btn-danger mx-2">Refresh</button>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </Container>
-                                    <hr className="bg-secondary"/>
-                                    <Container fluid={true}>
-                                        <Row>
-                                        
-                                            <Col sm={12} xs={12} md={12} lg={12}>
-                                                 <table className="table table-borderd table-striped" id="export-excel">
-                                                   <thead className="bg-light">
-                                           
-                                                            <div className="col-md-12 w-100">
-                                                                <h5 className="heading-subtitle text-success">Total : {this.state.total}TK</h5>
-                                                            </div>
-                                         
-                                                        <tr>
-                                                            <th width="20%">Decrease Reason</th>
-                                                            <th width="20%">Decrease Date</th>
-                                                            <th> Code</th>
-                                                            <th> Name</th>
-                                                            <th>Category</th>
-                                                            <th>Price</th>
-                                                            <th>Quantity</th>
-                                                            <th>Total</th>
-                                                        </tr>
-                                                   </thead>
-                                                   <tbody>
-                                                       {
-                                                        this.state.dataTable.map((List, i)=>{
-                                                            return  <tr>
-                                                                       
-                                                                        <td>{List.decrease_reason}</td>
-                                                                        <td>{List.decrease_date}</td>
-                                                                        <td>{List.product_code}</td>
-                                                                        <td>{List.product_name}</td>
-                                                                        <td>{List.product_category}</td>
-                                                                        <td>{List.product_unit_price}</td>
-                                                                        <td>{List.product_qty}</td>
-                                                                        <td>{List.product_total_price}</td>
-                                                                    </tr>
-                                                        })
-                                                       }
-                                                   </tbody>
-                                                 
-                                               </table>  
+                    <div className="no-print">  
+                    <ReactHTMLTableToExcel  
+                            className="btn btn-site btn-sm"  
+                            table="export-excel"  
+                            filename="Stock Decrease"  
+                            sheet="Sheet"  
+                            buttonText="Save As Excel" /> 
+                        <button onClick={this.print} className="btn btn-info ml-3 btn-sm">Print</button> 
+                    </div>  
+                    <br/>
+                
+                <div className="no-print">
+                    <div className="input-group">
+                        <input id="from_date" className="form-control form-control-sm mx-2" type="date"/>
+                        <input id="to_date" className="form-control form-control-sm mx-2" type="date"/>
+                        <button onClick={this.filterByDate} className="btn btn-sm btn-success mx-2">Filter</button>
+                        <button onClick={this.resetForm} className="btn btn-sm btn-danger mx-2">Refresh</button>
+                    </div>
+                </div>
+        <hr className="bg-secondary"/>
+                        <table className="table table-borderd table-striped" id="export-excel">
+                        <thead className="bg-light">
+                
+                                <div className="col-md-12 w-100">
+                                    <h5 className="heading-subtitle text-success">Total : {this.state.total}TK</h5>
+                                </div>
+                
+                            <tr>
+                                <th width="20%">Decrease Reason</th>
+                                <th width="20%">Decrease Date</th>
+                                <th> Code</th>
+                                <th> Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                            this.state.dataTable.map((List, i)=>{
+                                return  <tr>
+                                            
+                                            <td>{List.decrease_reason}</td>
+                                            <td>{List.decrease_date}</td>
+                                            <td>{List.product_code}</td>
+                                            <td>{List.product_name}</td>
+                                            <td>{List.product_category}</td>
+                                            <td>{List.product_unit_price}</td>
+                                            <td>{List.product_qty}</td>
+                                            <td>{List.product_total_price}</td>
+                                        </tr>
+                            })
+                            }
+                        </tbody>
+                        
+                    </table>  
+                </div>          
+                <br/>
+                <br/>
+                <br/>
 
-                                            </Col>
-                                        </Row>
-                                    </Container>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    </Row>
-                </Container>
         </Fragment>
         )
  }

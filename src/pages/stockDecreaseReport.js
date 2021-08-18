@@ -13,6 +13,7 @@ class StockDecrease extends React.Component{
  render(){
     return(
         <Fragment>
+            <title>Stock Adjustment Report</title>
             <NavBar/>
             <DecreaseList/>
            <div className="no-print">

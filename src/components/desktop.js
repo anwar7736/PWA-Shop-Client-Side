@@ -123,7 +123,7 @@ class DesktopNavbar extends React.Component{
                                     <Link to="/stockDecreaseReport">Stock Decrease Report</Link>
                                 </NavDropdown.Item>
                                 <NavDropdown.Item>
-                                    <Link to="/reports">Transaction Report</Link>
+                                    <Link to="/salesReport">Sales Report</Link>
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
                           </NavDropdown>

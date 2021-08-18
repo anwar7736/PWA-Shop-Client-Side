@@ -224,14 +224,14 @@ class TransactionList extends React.Component{
         let cart_list = allCart.map((List, i)=>{
                 return (
                         <div className="row">
-                                        <div className="col-4 text-center">
+                                        <div className="col text-center">
                                             <img className="cart-image" src={List.product_icon}/>
                                         </div>
-                                        <div className="col-4 text-center">
+                                        <div className="col text-center">
                                             <p className="product-name">{List.product_name}</p>
                                             <p className="product-price">Qty: {List.qty} | {List.product_total_price} TK</p>
                                         </div>
-                                        <div className="col-4 text-center">
+                                        <div className="col text-center">
                                             <div className="input-group">
                                                 <button onClick={this.cartItemPlus.bind(this, List.id)} className="circular-btn"><i className="fa fa-plus"/></button>
                                                 <button onClick={this.cartItemMinus.bind(this, List.id)} className="circular-btn"><i className="fa fa-minus"/></button>
@@ -248,35 +248,22 @@ class TransactionList extends React.Component{
 
         return (
             <Fragment>
-                <div className="mt-1 ">
-                <div  className="animated  zoomIn container-fluid">
-                    <div className="row">
-                        <div className="col-md-7 p-1  col-lg-7 col-sm-12">
-                            <div className="container shadow-sm p-3 bg-white ">
-                                <div className="row">
-                                    <div className="col-md-1 p-1">
+                <div  className="w-100 animated  zoomIn container-fluid mt-3">
+                                        <h3 className=" text-danger text-center">TRANSACTION</h3>
                                         <button className="btn" onClick={this.previous}><i className="fa fa-angle-left"/></button>
-                                    </div>
-                                    <div className="col-md-10 p-1">
+                                 
                                         <Slider ref={c=>(this.slider=c)} {...settings}>
                                             {CategoryView}
                                         </Slider>
-                                    </div>
-                                    <div className="col-md-1 p-1">
+                       
                                         <button className="btn" onClick={this.next}><i className="fa fa-angle-right"/></button>
-                                    </div>
-                                </div>
-                                <div className="row ListTransactionHeight ListTransaction ">
+
+                                <div className="w-100 container-fluid">
                                     {MyView}
                                 </div>
                             </div>
-                        </div>
-
-
-                        <div className="col-md-5 p-1  col-lg-5 col-sm-12">
-                            <div className="shadow-sm p-2 text-center bg-site">
-                                <h6 className="text-white">Cart List</h6>
-                            </div>
+                            <div className="container-fluid">
+                            <h6 className="text-danger">Cart List</h6>
                             <div className="shadow-sm bg-white text-center ListTransactionCartHeight ListTransaction p-3   ">
                                 <div className="container-fluid">
                                    {
@@ -290,11 +277,11 @@ class TransactionList extends React.Component{
                                 <h6>Total Due: {this.state.TotalOrderValue} TK</h6>
                                 <button onClick={this.ConfirmSale} className="btn btn-info">Confirm Sale</button>
                             </div>
-                        </div>
 
-                    </div>
                 </div>
-                </div>
+                <br/>
+                <br/>
+                <br/>
             </Fragment>
         );
  }

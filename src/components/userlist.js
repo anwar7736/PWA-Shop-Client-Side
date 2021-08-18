@@ -1,14 +1,18 @@
 import React, {Component, Fragment} from 'react';
-import {Modal,Button} from 'react-bootstrap'
-import BootstrapTable from 'react-bootstrap-table-next';
+import {Button, Card, Col, Container, Modal, Row} from "react-bootstrap";
+import DataTable from "react-data-table-component";
 import Axios from 'axios';
 import cogoToast from 'cogo-toast';
-import paginationFactory from 'react-bootstrap-table2-paginator';
 
 class UserList extends React.Component{
  constructor() {
         super();
         this.state={
+            dataTable : [],
+            show:false,
+            showEdit:false,
+            deleteID:"",
+            editID:"",
             fname : '',
             uname : '',
             email : '',
@@ -16,12 +20,6 @@ class UserList extends React.Component{
             upass : '',
             roll1 : 'Admin',
             roll2 : 'Worker',
-            isDisabled : true,
-            selectedID : '',
-            dataTable : [],
-            show :false,
-            ModalTitle : '',
-            submitBtn : '',
         }
     }
     componentDidMount(){
@@ -91,7 +89,7 @@ class UserList extends React.Component{
         }
         else
         {
-          Axios.post('https://api.coderanwar.com/api/UpdateUser', {
+             Axios.post('https://api.coderanwar.com/api/UpdateUser', {
                 id:this.state.editID,
                 name:this.state.fname,
                 username:this.state.uname,
@@ -124,16 +122,8 @@ class UserList extends React.Component{
     handleClose=()=>{
         this.setState({ show:false})
     }
-    handleOpen=(action)=>{
-        if(action==='Add')
-        {
-          this.setState({ModalTitle : 'Add New User', submitBtn : 'Save Data'});
-        }
-        else if(action==='Edit')
-        {
-          this.setState({ModalTitle : 'Edit Current User', submitBtn : 'Update Data'});
-        }
 
+    handleOpen=()=>{
         this.setState({ show:true})
     }
 
@@ -147,7 +137,7 @@ class UserList extends React.Component{
     }
 
     deleteIconOnClick=(id)=>{
-           
+                
                  Axios.get('https://api.coderanwar.com/api/DeleteUser/'+id)
                  .then(response=>{
                      cogoToast.success('User has been deleted');
@@ -156,6 +146,7 @@ class UserList extends React.Component{
                  .catch(error=>{
 
                  })
+                
             
           
     }
@@ -179,69 +170,72 @@ class UserList extends React.Component{
 
     }
  render(){
- 	 const DataList = this.state.dataTable;
+ 	const columns = [
+            {
+                name: 'Full Name',
+                selector: 'fullname',
+                sortable: true,
 
-    const columns = [
-    {
-      dataField: 'id',
-      text: 'ID'
-    },  
-    {
-     dataField: 'fullname',
-      text: 'Full Name'
-    }, 
-    {
-      dataField: 'username',
-      text: 'User Name'
-    },
-    {
-      dataField: 'roll',
-      text: 'Roll'
-    }, 
-    {
-      dataField: 'email',
-      text: 'Email'
-    }
-
-    ];
-
-    const selectRow = {
-    mode: 'radio',
-    onSelect:(row, isSelect, rowIndex)=>{ 
-        this.setState({selectedID : row['id'], isDisabled: false});
-    }
-}
-
+            },
+            {
+                name: 'User Name',
+                selector: 'username',
+                sortable: true,
+            },
+            {
+                name: 'Roll',
+                selector: 'roll',
+                sortable: true,
+            },
+            {
+                name: 'Email',
+                selector: 'email',
+                sortable: true,
+            },
+            {
+                name: 'Delete',
+                selector: 'id',
+                sortable: false,
+                cell: row => <button onClick={this.deleteIconOnClick.bind(this,row.id)}  className="btn btn-sm text-danger"><i className="fa fa-trash-alt"/></button>
+            },
+            {
+                name: 'Edit',
+                selector: 'id',
+                sortable: false,
+                cell: row => <button onClick={this.editIconOnClick.bind(this,row.id)}  className="btn btn-sm text-success"><i className="fa fa-edit"/></button>
+            },
+        ];
  	return(
  		<Fragment>
- 			 <div className="w-100 bg-light text-white container-fluid">
-            <h3 className="text-danger text-center">All User List</h3>
-            <div>
-              <button onClick={this.handleOpen.bind(this,'Add')} className="btn btn-success btn-sm m-2">Add New User</button>
-              <button onClick={this.handleOpen.bind(this,'Edit')} className="btn btn-info btn-sm m-2" disabled={this.state.isDisabled}>Edit User</button>
-              <button className="btn btn-danger btn-sm m-2" disabled={this.state.isDisabled}>Delete User</button>
-            </div>
-            <BootstrapTable 
-              keyField='id' 
-              data={ DataList } 
-              columns={ columns } 
-              selectRow={ selectRow }
-              pagination={ paginationFactory() } 
-            />
-          </div><br/><br/>
-          <Modal animation={false} className="animated zoomIn" show={this.state.show} onHide={this.handleClose}>
+ 			 <div className="container-fluid mt-3 animated zoomIn">
+                                            <h3 className="text-danger text-center">All User List</h3>
+                                            <button onClick={this.handleOpen} className="float-right circular-btn"><i className="fa fa-plus"/></button>
+                                            <hr className="bg-secondary"/>
+                                                <DataTable
+                                                    noHeader={true}
+                                                    paginationPerPage={5}
+                                                    pagination={true}
+                                                    columns={columns}
+                                                    data={this.state.dataTable}
+                                                />
+
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                 <Modal animation={false} className="animated zoomIn" show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header>
-                        <h6>{this.state.ModalTitle}</h6>
+                        <h6>Add New User</h6>
                     </Modal.Header>
                     <Modal.Body>
                         <label className="form-label">Full Name</label>
-                        <input value={this.state.fname} onChange={this.onChangeHandler} name="fname" className="form-control form-control-sm" type="text"/>
+                        <input onChange={this.onChangeHandler} name="fname" className="form-control form-control-sm" type="text"/>
                         <label className="form-label">User Name</label>
-                        <input value={this.state.uname} onChange={this.onChangeHandler} name="uname" className="form-control form-control-sm" type="text"/> 
+                        <input onChange={this.onChangeHandler} name="uname" className="form-control form-control-sm" type="text"/> 
                         <label className="form-label">User Email</label>
-                        <input value={this.state.email} onChange={this.onChangeHandler} name="email" className="form-control form-control-sm" type="text"/>
+                        <input onChange={this.onChangeHandler} name="email" className="form-control form-control-sm" type="text"/>
                         <label className="form-label">Password</label>
-                        <input value={this.state.password} onChange={this.onChangeHandler} name="upass" className="form-control form-control-sm" type="password"/>
+                        <input onChange={this.onChangeHandler} name="upass" className="form-control form-control-sm" type="password"/>
                         <label className="form-label">User Roll</label>
                         <select onChange={this.onChangeHandler} name="uroll" value={this.state.uroll} className="form-control form-control-sm form-select">
                             <option>{this.state.roll1}</option>
@@ -253,12 +247,39 @@ class UserList extends React.Component{
                             Close
                         </Button>
                         <button onClick={this.onSubmitHandler} className="btn btn-sm btn-success">
-                           {this.state.submitBtn}
+                            Save Changes
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal animation={false} className="animated zoomIn" show={this.state.showEdit} onHide={this.handleCloseEdit}>
+                    <Modal.Header>
+                        <h6>Edit User</h6>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <label className="form-label">Full Name</label>
+                        <input onChange={this.onChangeHandler} name="fname" value={this.state.fname} className="form-control form-control-sm" type="text"/> 
+                        <label className="form-label ">User Name</label>
+                        <input onChange={this.onChangeHandler} name="uname" value={this.state.uname}className="form-control form-control-sm" type="text"/>
+                         <label className="form-label">User Email</label>
+                        <input onChange={this.onChangeHandler} name="email" value={this.state.email} className="form-control form-control-sm" type="text"/>
+                        <label className="form-label">User Roll</label>
+                        <select onChange={this.onChangeHandler} name="uroll" value={this.state.uroll} className="form-control form-control-sm form-select">
+                            <option>{this.state.roll1}</option>
+                            <option>{this.state.roll2}</option>
+                        </select>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button className="btn-sm btn-danger" variant="secondary" onClick={this.handleCloseEdit}>
+                            Close
+                        </Button>
+                        <button  className="btn btn-sm btn-info"  onClick={this.onSubmitHandler}>
+                            Save Changes
                         </button>
                     </Modal.Footer>
                 </Modal>
  		</Fragment>
- 		);
+ 		)
  }
 }
 export default UserList;

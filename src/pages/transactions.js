@@ -13,6 +13,7 @@ class Transactions extends React.Component{
  render(){
  	return(
  		<Fragment>
+			 <title>Transaction</title>
  			<NavBar/>
  			<TrasactionList/>
  			<Footer/>

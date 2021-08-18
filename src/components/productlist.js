@@ -1,10 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import {Button, Card, Col, Container, Modal, Row} from "react-bootstrap";
-import BootstrapTable from 'react-bootstrap-table-next';
+import DataTable from "react-data-table-component";
 import Axios from 'axios';
 import cogoToast from 'cogo-toast';
-import ReactHtmlParser from 'react-html-parser';
-import paginationFactory from 'react-bootstrap-table2-paginator';
 
 class ProductList extends React.Component{
 	constructor() {
@@ -13,16 +11,14 @@ class ProductList extends React.Component{
             dataTable : [],
             show:false,
             showEdit:false,
+            deleteID:"",
+            editID:"",
             categories : [],
             product_name : '',
             product_icon : '',
             product_price : '',
             product_remarks : '',
             selected_category : 'Mobile',
-            isDisabled : true,
-            selectedID : '',
-            ModalTitle : '',
-            submitBtn : '',
         }
     }
         componentDidMount(){
@@ -149,25 +145,16 @@ class ProductList extends React.Component{
         }
     }
 
+    handleClose=()=>{
+        this.setState({ show:false})
+    }
+
     resetForm=()=>{
         this.setState({ cat_name : '',cat_img : ''})
     }
 
-    handleOpen=(action)=>{
-        if(action==='Add')
-        {
-          this.setState({ModalTitle : 'Add New Product', submitBtn : 'Save Data'});
-        }
-        else if(action==='Edit')
-        {
-          this.setState({ModalTitle : 'Edit Current Product', submitBtn : 'Update Data'});
-        }
-
+    handleOpen=()=>{
         this.setState({ show:true})
-    }
-
-    handleClose=()=>{
-        this.setState({ show:false})
     }
 
     handleCloseEdit=()=>{
@@ -179,6 +166,7 @@ class ProductList extends React.Component{
     }
 
     deleteIconOnClick=(id)=>{
+
              Axios.get('https://api.coderanwar.com/api/DeleteProduct/'+id)
              .then(response=>{
                  cogoToast.success('Product has been deleted');
@@ -208,82 +196,82 @@ class ProductList extends React.Component{
 
     }
 
-    imgCellFormat=(cell, rowIndex)=>{
-            return <img className="table-cell-img" src={cell}/>
-        }
-    cellFormatter=(cell, rowIndex)=>{
-            return ReactHtmlParser(cell);
-        }
 
  render(){
-
-   const DataList = this.state.dataTable;
-
-
-
-    const selectRow = {
-    mode: 'radio',
-    onSelect:(row, isSelect, rowIndex)=>{ 
-        this.setState({selectedID : row['id'], isDisabled: false});
-        }
-    }
-
-    const columns = [
-    {
-      dataField: 'product_icon',
-      text: 'Product Icon',
-      formatter:this.imgCellFormat
-    },  
-    {
-      dataField: 'product_code',
-      text: 'Product Code'
-    },
-    {
-     dataField: 'product_name',
-      text: 'Product Name'
-    }, 
-    {
-     dataField: 'product_remarks',
-      text: 'Product Remarks'
-    }, 
-    {
-     dataField: 'product_price',
-      text: 'Product Price'
-    },
-     {
-     dataField: 'product_category',
-      text: 'Product Category'
-    }
-
-    ];
     const AllCategory = this.state.categories;
-
     const category_list = AllCategory.map(item=>{
         return <option>{item.cat_name}</option>
-    });
+    })
+ 	const columns = [
+            {
+                name: 'Product Icon',
+                selector: 'product_icon',
+                sortable: true,
+                cell: row => <img src={row.product_icon} className="cat-icon"/>
 
+
+            },
+            {
+                name: 'Product Name',
+                selector: 'product_name',
+                sortable: true,
+
+            },
+            {
+                name: 'Product Code',
+                selector: 'product_code',
+                sortable: true,
+            },
+            {
+                name: 'Product Remarks',
+                selector: 'product_remarks',
+                sortable: true,
+            },
+            {
+                name: 'Product Price',
+                selector: 'product_price',
+                sortable: true,
+            },
+            {
+                name: 'Product Category',
+                selector: 'product_category',
+                sortable: true,
+            },
+
+            {
+                name: 'Delete',
+                selector: 'id',
+                sortable: false,
+                cell: row => <button onClick={this.deleteIconOnClick.bind(this,row.id)}  className="btn text-danger"><i className="fa fa-trash-alt"/></button>
+            },
+            {
+                name: 'Edit',
+                selector: 'id',
+                sortable: false,
+                cell: row => <button onClick={this.editIconOnClick.bind(this,row.product_code)}  className="btn text-primary"><i className="fa fa-edit"/></button>
+            },
+        ];
 
  	return(
  		<Fragment>
- 			  <div className="w-100 bg-light text-dark container-fluid">
+ 			  <div className="container-fluid mt-3 animated zoomIn">
                     <h3 className="text-danger text-center">All Product List</h3>
-                    <div>
-                      <button onClick={this.handleOpen.bind(this,'Add')} className="btn btn-success btn-sm m-2">Add New Product</button>
-                      <button onClick={this.handleOpen.bind(this,'Edit')} className="btn btn-info btn-sm m-2" disabled={this.state.isDisabled}>Edit Product</button>
-                      <button className="btn btn-danger btn-sm m-2" disabled={this.state.isDisabled}>Delete Product</button>
-                    </div>
-                    <BootstrapTable 
-                      keyField='id' 
-                      data={ DataList } 
-                      columns={ columns } 
-                      selectRow={ selectRow }
-                      pagination={ paginationFactory() } 
-                    />
-                </div><br/><br/>
-
+                    <button onClick={this.handleOpen} className="float-right circular-btn"><i className="fa fa-plus"/></button>
+                        <hr className="bg-secondary"/>
+                        <DataTable
+                            noHeader={true}
+                            paginationPerPage={5}
+                            pagination={true}
+                            columns={columns}
+                            data={this.state.dataTable}
+                        />
+                </div>
+                <br/>
+                <br/>
+                <br/>
                 <Modal animation={false} className="animated zoomIn" show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header>
-                        <h6>{this.state.ModalTitle}</h6>
+                        <h6>Add New Product</h6>
                     </Modal.Header>
                     <Modal.Body>
                         <label className="form-label">Product Name</label>
@@ -305,7 +293,39 @@ class ProductList extends React.Component{
                             Close
                         </button>
                         <button className="btn btn-sm btn-success"  onClick={this.onSubmitHandler}>
-                            {this.state.submitBtn}
+                            Save Changes
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal animation={false} className="animated zoomIn" show={this.state.showEdit} onHide={this.handleCloseEdit}>
+                    <Modal.Header>
+                        <h6>Edit Product</h6>
+                    </Modal.Header>
+                    <Modal.Body>
+
+                        <label className="form-label">Product Name</label>
+                        <input value={this.state.product_name} name="product_name" onChange={this.onChangeHandler} className="form-control form-control-sm" type="text"/>
+                        <label className="form-label">Product Icon</label>
+                        <input name="product_icon" onChange={this.onProductIconChange} className="form-control form-control-sm form-control-file" type="file"/>
+                        <label className="form-label">Product Price</label>
+                        <input value={this.state.product_price} name="product_price" onChange={this.onChangeHandler} className="form-control form-control-sm" type="text"/>
+                        <label className="form-label">Product Remarks</label>
+                        <input value={this.state.product_remarks} name="product_remarks" onChange={this.onChangeHandler} className="form-control form-control-sm" type="text"/>
+
+                        <label className="form-label">Product Category</label>
+                        <select onChange={this.onCategoryChange} value={this.state.selected_category} className="form-control form-control-sm form-select">
+                            {category_list}
+                        </select>
+
+
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button className="btn btn-sm btn-danger" onClick={this.handleCloseEdit}>
+                            Close
+                        </button>
+                        <button className="btn btn-sm btn-primary"  onClick={this.onUpdateHandler}>
+                            Save Changes
                         </button>
                     </Modal.Footer>
                 </Modal>

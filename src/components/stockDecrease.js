@@ -117,41 +117,21 @@ class StockDecrease extends React.Component{
 
     return(
         <Fragment>
-              <Container className="animated zoomIn">
-
-                    <Row className="mt-2">
-                        <Col sm={12} xs={12} md={12} lg={12}>
-                            <Card>
-                                <Card.Body>
-                                    <Container fluid={true}>
-                                        <Row>
-                                            <Col>
-                                                <h4 className="table-title text-danger">Current Stock Decrease</h4>
-                                            </Col>
-                                            <Col>
-                                                <h6 className="table-title text-danger"> Decrease Reason : <input className="w-50 bg-light" onChange={(e)=>this.setState({dec_reason: e.target.value})} type="text"/></h6>
-                                            </Col>
-                                        </Row>
-                                    </Container>
-                                    <hr className="bg-secondary"/>
-                                    <Container fluid={true}>
-                                        <Row>
-                                            <Col sm={12} xs={12} md={12} lg={12}>
-                                                <DataTable
-                                                    noHeader={true}
-                                                    paginationPerPage={5}
-                                                    pagination={true}
-                                                    columns={columns}
-                                                    data={this.state.dataTable}
-                                                />
-                                            </Col>
-                                        </Row>
-                                    </Container>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    </Row>
-                </Container>
+              <div className="container-fluid animated zoomIn mt-3">
+                    <h3 className=" text-danger text-center">Stock Adjustment</h3>
+                    <h6 className="table-title text-danger w-50">Adjustment Reason : <input className="w-50 bg-light" onChange={(e)=>this.setState({dec_reason: e.target.value})} type="text" placeholder="Stock Adjustment"/></h6>
+                    <hr className="bg-secondary"/>
+                    <DataTable
+                        noHeader={true}
+                        paginationPerPage={5}
+                        pagination={true}
+                        columns={columns}
+                        data={this.state.dataTable}
+                    />
+            </div>
+            <br/>
+            <br/>
+            <br/>
         </Fragment>
         )
  }
