@@ -5,31 +5,32 @@ import {Redirect} from 'react-router-dom';
 import {Link} from "react-router-dom";
 import Axios from 'axios';
 
-class RecoverPass extends React.Component{
+class ChangePass extends React.Component{
 	constructor(){
 		super()
 		this.state = {
-			email : '',
+			username : '',
 			new_pass : '',
 			confirm_pass : '',
+			updateBtn : 'Update Password',
+			isDisabled : false,
 		}
 	}
+	componentDidMount() {
+		let username = localStorage.getItem('current_user');
+		if(username!==null)
+		{
+			this.setState({username : username});
+		}
+	}
+	
 
-recoverPassword=(e)=>{
+ChangePassword=(e)=>{
 	e.preventDefault();
-	let email = this.state.email;
+	let username = this.state.username;
 	let new_pass = this.state.new_pass;
 	let confirm_pass = this.state.confirm_pass;
-	let emailPattern = /^[a-zA-Z0-9]+@+[a-zA-Z0-9]+.+[A-z]/;
-	if(email=='')
-	{
-		 cogoToast.error('Email Address is Required!')
-	}
-	else if(!emailPattern.test(email))
-	{
-		 cogoToast.error('Invalid Email Address!')
-	}
-	else if(new_pass=='')
+	if(new_pass=='')
 	{
 		 cogoToast.error('New Password is Required!')
 	}
@@ -46,22 +47,32 @@ recoverPassword=(e)=>{
 		 cogoToast.error('Both Password does not Match!')
 	}
 	else{
+
+		this.setState({updateBtn : 'Updating...', isDisabled : true});
 		let MyForm = new FormData();
-		MyForm.append('email', email);
-		MyForm.append('password', new_pass);
-		Axios.post('https://api.coderanwar.com/api/RecoverPassword', MyForm)
+		MyForm.append('username', username);
+		MyForm.append('newpass', new_pass);
+		Axios.post('https://api.coderanwar.com/api/ChangePassword', MyForm)
                  .then(response=>{
                    if(response.status===200 && response.data===1)
                    {
-                   		
-                   		cogoToast.success('Password Recover Successfully');
-                   		setTimeout(()=>{
-						Router.push('/login');
-                   		},2000);
+                   		cogoToast.success('Password Changed Successfully');
+						   this.setState({
+							updateBtn : 'Update Password', 
+							isDisabled : false, 
+							new_pass : '',
+							confirm_pass : ''
+						});
                    }
                    else if(response.status===200 && response.data===0)
                    {
-                   		cogoToast.error('Email does not Exists!');
+						this.setState({
+							updateBtn : 'Update Password', 
+							isDisabled : false, 
+							new_pass : '',
+							confirm_pass : ''
+						});
+						cogoToast.error('Something went wrong!');
                    }
                  })
                  .catch(error=>{
@@ -75,24 +86,24 @@ recoverPassword=(e)=>{
  			<Container className="m-4">
  				<Row>
  					<Col lg={5} md={{span:4, offset:4}} sm={12}>
- 						<Form onSubmit={this.recoverPassword}>
- 								<h2 className="text-center text-danger">Password Recover</h2>
+ 						<Form onSubmit={this.ChangePassword}>
+ 								<h2 className="text-center text-danger">Change Password</h2>
 						  <Form.Group controlId="formBasicEmail">
-						    <Form.Label>Enter Email</Form.Label>
-						    <Form.Control onChange={(e)=>{this.setState({email:e.target.value})}} type="text" placeholder="Enter email" />
+						    <Form.Label>Username </Form.Label>
+						    <Form.Control disabled value={this.state.username} onChange={(e)=>{this.setState({email:e.target.value})}} type="text" placeholder="Enter email" />
 						    <Form.Text className="text-muted">
 						    </Form.Text>
 						  </Form.Group>
 						  <Form.Group controlId="formBasicPassword">
 						    <Form.Label>Enter New Password</Form.Label>
-						    <Form.Control onChange={(e)=>{this.setState({new_pass:e.target.value})}} type="password" placeholder="Enter new password" />
+						    <Form.Control value={this.state.new_pass} onChange={(e)=>{this.setState({new_pass:e.target.value})}} type="password" placeholder="Enter new password" />
 						  </Form.Group>
 						  <Form.Group controlId="formPassword">
 						  <Form.Label>Enter Confirm New Password</Form.Label>
-						    <Form.Control onChange={(e)=>{this.setState({confirm_pass:e.target.value})}} type="password" placeholder="Re-type new password" />
+						    <Form.Control value={this.state.confirm_pass} onChange={(e)=>{this.setState({confirm_pass:e.target.value})}} type="password" placeholder="Re-type new password" />
 						  </Form.Group>
-						  <Button variant="info" className="btn-block" type="submit">
-						    UPDATE	
+						  <Button disabled={this.state.isDisabled} variant="info" className="btn-block" type="submit">
+						  {this.state.updateBtn}
 						  </Button><br/>
 						    <Link href="/login">
 						    <p className="forget-pass">Back to Login</p> 
@@ -106,4 +117,4 @@ recoverPassword=(e)=>{
  	
  }
 }
-export default RecoverPass;
+export default ChangePass;

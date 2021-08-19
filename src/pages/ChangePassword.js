@@ -1,10 +1,10 @@
 import React, {Component, Fragment} from 'react';
 import NavBar from '../components/desktop';
-import SiteLogin from '../components/login';
+import Change from '../components/ChangePass';
 import Footer from '../components/footer';
 import {Redirect} from 'react-router-dom';
 
-class Login extends React.Component{
+class ChangePassword extends React.Component{
 	constructor(){
 		super();
 		this.state = {
@@ -14,31 +14,30 @@ class Login extends React.Component{
 		}
 
 	componentDidMount(){
-		   if(localStorage.getItem('login')!=null)
+		   if(localStorage.getItem('login')==null)
             {
-                this.setState({redirectStatus : true});
+                 this.setState({redirectStatus : true});
             }
 	}
 
-	RedirectToHomePage=()=>{
+	RedirectToLoginPage=()=>{
 		if(this.state.redirectStatus==true)
 		{
 			return (
-					<Redirect to="/" />
+					<Redirect to="/login" />
 					);
 		}
 	}
-
  render(){
  	return(
  		<Fragment>
- 			<title>Login</title>
+ 				<title>Change Password</title>
  			<NavBar/>
- 			<SiteLogin/>
+ 			<Change/>
  			<Footer/>
-		  {this.RedirectToHomePage()}
+			{this.RedirectToLoginPage()}
  		</Fragment>
  		)
  }
 }
-export default Login;
+export default ChangePassword;

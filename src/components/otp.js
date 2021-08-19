@@ -9,98 +9,117 @@ class OTP extends React.Component{
 	constructor(){
 		super()
 		this.state = {
-			username : '',
-			password : '',
-			isChecked : true,
+			email : '',
+            otp: '',
+            redirectStatus : false,
+            totalSec : 300,
+            status : false,
+            isDisabled : true,
+			verifyBtn : 'Verify OTP',
 		}
 	}
 componentDidMount(){
-	let user = localStorage.getItem('user');
-	let pass = localStorage.getItem('pass')
-	if(user!==null && pass!==null)
+	let email = localStorage.getItem('email_verified');
+
+	if(email!=null)
 	{
-		this.setState({username : user, password : pass, isChecked : true});
+		this.setState({email : email});
 	}
-}
-RememberOnChange=()=>{
-	if(this.state.isChecked==false)
-	{
-		this.setState({isChecked : true});
-	}
-	else
-	{
-		this.setState({isChecked : false});
-	}
+
+	setInterval(this.countDown,1000); 
+	Axios.post('https://api.coderanwar.com/api/GetOTPExpiration', {email : email})
+	.then(response=>{
+		if(response.data < 0)
+		{
+			this.setState({status : true});
+		}
+		else{
+			this.setState({totalSec : response.data});
+		}
+		
+	})
+	.catch(error=>{
+
+	})    
+
 }
 
-Login=(e)=>{
+countDown=()=>{
+	var totalSec = this.state.totalSec;
+	 var min = Math.floor(totalSec / 60);
+	 var sec = (totalSec % 60);
+	 if(min < 10)
+	 {
+		 min = '0' + min;
+	 }
+
+	 if(sec < 10)
+	 {
+		 sec = '0' + sec;
+	 }
+	 if(totalSec==0)
+	 {
+	   clearInterval(totalSec);
+	   return this.setState({status : true, totalSec : ''});
+	 }
+	 else{
+		   document.getElementById('count_down').innerHTML = min + ':' + sec; 
+		   this.state.totalSec--;
+	 }
+   
+ }
+
+onChangeHandler=(e)=>
+    {
+        let otp = e.target.value;
+        this.setState({otp : otp});
+        if(otp.length===6)
+        {
+            this.setState({isDisabled : false});
+        }
+        
+       else
+        {
+            this.setState({isDisabled : true});
+        }
+    }
+
+
+OTPVerify=(e)=>{        
 	e.preventDefault();
-	let username = this.state.username;
-	let password = this.state.password;
-	if(username=='')
-	{
-		 cogoToast.warn('Username Field is Required!')
+	this.setState({verifyBtn : 'Verifying...'});
+	let email = this.state.email;
+	let otp = this.state.otp;
+	let MyForm = new FormData();
+	MyForm.append('email', email);
+	MyForm.append('otp', otp);
+
+	Axios.post('https://api.coderanwar.com/api/OTPVerification', MyForm)
+	.then(response=>{
+		this.setState({verifyBtn : 'Verify OTP', isDisabled : true});
+		if(response.status==200 && response.data==1)
+		{
+			cogoToast.success('OTP Verification Successfully');
+			setTimeout(()=>{
+				localStorage.setItem('otp_verified', email);
+				this.setState({otp : '', isDisabled : true});
+				localStorage.removeItem('email_verified');
+				this.setState({redirectStatus : true});
+			},1000);
+			
+			document.getElementById('OTPForm').reset();
+		}
+		else
+		{	
+			this.setState({verifyBtn : 'Verify OTP', isDisabled : true});
+			cogoToast.error('Your OTP is not valid!');
+		}
+	})
+	.catch(error=>{
+		 
+	})
+
 	}
-	else if(password=='')
-	{
-		 cogoToast.warn('Password Field is Required!')
-	}
-	else{
-		Axios.post('https://api.coderanwar.com/api/login', {username:username, password:password})
-                 .then(response=>{
-                    if(response.status==200 && response.data[0]==='admin')
-                    {
-                         localStorage.setItem('login', true);
-                         localStorage.setItem('seller', response.data[1]);
-                         localStorage.setItem('admin', true);
-                         if(this.state.isChecked==true)
-                         {
-                         	localStorage.setItem('user', this.state.username);
-                         	localStorage.setItem('pass', this.state.password);
-                         }
-                         else
-                         {
-                         	let user = localStorage.getItem('user');
-							let pass = localStorage.getItem('pass');
-							if(user!==null && pass!==null)
-							{
-								localStorage.removeItem('user');
-								localStorage.removeItem('pass');	
-							}
-                         }
-                        
-                    }
-                    else if (response.status==200 && response.data[0]==='worker')
-                    {
-                    	localStorage.setItem('login', true);
-                    	localStorage.setItem('seller', response.data[1]);
-                         localStorage.setItem('worker', true);
-                         if(this.state.isChecked==true)
-                         {
-                         	localStorage.setItem('user', this.state.username);
-                         	localStorage.setItem('pass', this.state.password);
-                         }
-                         else
-                         {
-                         	let user = localStorage.getItem('user');
-						let pass = localStorage.getItem('pass');
-						if(user!==null && pass!==null)
-						{
-							localStorage.removeItem('user');
-							localStorage.removeItem('pass');	
-						}
-                         }
-                       
-                    }
-                    else{
-                         cogoToast.error(response.data);
-                    }
-                 })
-                 .catch(error=>{
-                    cogoToast.error('Something went wrong!');
-                 })
-	}
-}
 passwordShowHide=()=>{
 	let input = document.getElementById("password");
 	let btnText = document.getElementById("showHideBtn");
@@ -115,22 +134,41 @@ passwordShowHide=()=>{
 		btnText.innerHTML = '<i class="fa fa-eye"/> Show Password';
 	}
 }
+
+onRedirectToResetPassword=()=>{
+	if(this.state.redirectStatus===true){
+		return (
+				<Redirect to="/reset_password" />
+			   );
+	}
+} 
+onRedirectToEmailVerify=()=>{
+	if(this.state.status===true){
+		return (
+				<Redirect to="/email_verification" />
+			   );
+	}
+}
+
  render(){
 
  	return(
  		<Fragment>	
  			<Container className="mt-4 col-lg-5 col-md-5 col-sm-8 col-xs-12">
- 						<Form onSubmit={this.Login}>
+ 						<Form id="OTPForm" onSubmit={this.OTPVerify}>
  							<h2 className="text-center text-danger">Step 02 : OTP Verification</h2>
+							 <p>We've already sent 6 digits OTP number in this email : {this.state.email}</p><hr/>
+                             <p>This OTP will be expired within <span id="count_down" className="text-danger"></span></p>
+                             <hr/>
 						  <Form.Group controlId="formBasicEmail">
 						    <Form.Label>Enter Valid OTP</Form.Label>
-						    <Form.Control value={this.state.username} maxLength="6" onChange={(e)=>{this.setState({username:e.target.value})}} type="text" placeholder="Enter your valid OTP number..." />
+						    <Form.Control value={this.state.otp} maxLength="6" onChange={this.onChangeHandler} type="text" placeholder="Enter your valid OTP number..." />
 						    <Form.Text className="text-muted">
 						    </Form.Text>
 						  </Form.Group>
 
-						  <Button variant="success" className="btn-block mb-2" type="submit">
-						    Verify OTP	
+						  <Button disabled={this.state.isDisabled} variant="success" className="btn-block mb-2" type="submit">
+						    {this.state.verifyBtn}	
 						  </Button>
 						  	<Link to="/email_verification">
 						    		<p className="forget-pass">Back to Email Verify</p> 
@@ -138,6 +176,8 @@ passwordShowHide=()=>{
 						   
 					</Form>
  			</Container>
+			 {this.onRedirectToResetPassword()}
+             {this.onRedirectToEmailVerify()}
  		</Fragment>
  		)
  	

@@ -1,13 +1,14 @@
 import React, {Component, Fragment} from 'react';
 import {Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import {Link} from "react-router-dom";
-import {Redirect} from "react-router";
+import {Redirect} from "react-router-dom";
 
 class DesktopNavbar extends React.Component{
     constructor(){
         super()
         this.state = {
             login: '',
+            redirectStatus : false,
         }
     }
     componentDidMount(){
@@ -26,10 +27,21 @@ class DesktopNavbar extends React.Component{
     Logout=()=>{
         localStorage.removeItem('admin');
         localStorage.removeItem('worker');
+        localStorage.removeItem('current_user');
         localStorage.removeItem('login');
         localStorage.removeItem('seller');
-        
+        this.setState({redirectStatus : true});
     }
+
+    RedirectToLoginPage=()=>{
+        if(this.state.redirectStatus==true)
+        {
+            return (
+                    <Redirect to="/login" />
+                    );
+        }
+    }
+
  render(){
     
     const login_logout_btn = 
@@ -105,25 +117,28 @@ class DesktopNavbar extends React.Component{
                             </Nav.Link>
                             <NavDropdown className="nav-item-div" title="Others" id="navbarScrollingDropdown">
                                  <NavDropdown.Item>
-                                    <Link to="/stock_received">Stock Received</Link>
+                                    <Link to="/stock_received" className="text-success" >Stock Received</Link>
                                 </NavDropdown.Item>
                                 <NavDropdown.Item>
-                                    <Link to="/stock_adjustment">Stock Decrease</Link>
+                                    <Link to="/stock_adjustment" className="text-primary" >Stock Decrease</Link>
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
+                                <NavDropdown.Item>
+                                    <Link to="/change_password" className="text-danger">Change Password</Link>
+                                </NavDropdown.Item>
                           </NavDropdown>
                           <i className="fa fa-report-alt"/><NavDropdown className="nav-item-div" title="Reports" id="navbarScrollingDropdown">
                                  <NavDropdown.Item>
-                                    <Link to="/currentStock">Current Stock Report</Link>
+                                    <Link to="/currentStock"className="text-danger" >Current Stock Report</Link>
                                 </NavDropdown.Item>
                                 <NavDropdown.Item>
-                                    <Link to="/stockReceivedReport">Stock Received Report</Link>
+                                    <Link to="/stockReceivedReport" className="text-success">Stock Received Report</Link>
                                 </NavDropdown.Item>
                                 <NavDropdown.Item>
-                                    <Link to="/stockDecreaseReport">Stock Decrease Report</Link>
+                                    <Link to="/stockDecreaseReport" className="text-primary">Stock Decrease Report</Link>
                                 </NavDropdown.Item>
                                 <NavDropdown.Item>
-                                    <Link to="/salesReport">Sales Report</Link>
+                                    <Link to="/salesReport" className="text-dark">Sales Report</Link>
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
                           </NavDropdown>
@@ -134,6 +149,7 @@ class DesktopNavbar extends React.Component{
 
 				  </Navbar.Collapse>
 			</Navbar>
+            {this.RedirectToLoginPage()}
  		</Fragment>
  		)
  }

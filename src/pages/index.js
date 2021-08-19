@@ -3,6 +3,7 @@ import NavBar from '../components/desktop';
 import DashboardList from '../components/dashboardlist';
 import Footer from '../components/footer';
 import Axios from 'axios';
+import {Redirect} from 'react-router-dom';
 
 class Index extends React.Component{
     constructor(){
@@ -14,13 +15,17 @@ class Index extends React.Component{
             earnings : '',
             dataTable : '',
             dataChart : '',
+            redirectStatus : false,
         }
     }
     componentDidMount(){
             if(localStorage.getItem('login')==null)
             {
-                 
+                 this.setState({redirectStatus : true});
             }
+           
+
+
          Axios.get('https://api.coderanwar.com/api/CountSummary')
          .then(response=>{
              this.setState({
@@ -47,7 +52,17 @@ class Index extends React.Component{
          .catch(error=>{
 
          })
+    } 
+    
+    RedirectToLoginPage=()=>{
+        if(this.state.redirectStatus==true)
+        {
+            return (
+                    <Redirect to="/login" />
+                    );
+        }
     }
+
  render(){
 
  	return(
@@ -63,6 +78,7 @@ class Index extends React.Component{
 			   dataTable={this.state.dataTable}
  			/>
             <Footer/>
+            {this.RedirectToLoginPage()}
  		</Fragment>
  		)
     

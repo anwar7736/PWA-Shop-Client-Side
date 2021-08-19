@@ -2,14 +2,33 @@ import React, {Component, Fragment} from 'react';
 import NavBar from '../components/desktop';
 import TrasactionList from '../components/transactionlist';
 import Footer from '../components/footer';
+import {Redirect} from 'react-router-dom';
 
 class Transactions extends React.Component{
+	constructor(){
+		super();
+		this.state = {
+			redirectStatus : false,
+		}
+
+		}
+
         componentDidMount(){
             if(localStorage.getItem('login')==null)
             {
-                 
+                 this.setState({redirectStatus : true});
             }
         }
+
+		RedirectToLoginPage=()=>{
+			if(this.state.redirectStatus==true)
+			{
+				return (
+						<Redirect to="/login" />
+						);
+			}
+		}
+
  render(){
  	return(
  		<Fragment>
@@ -17,6 +36,7 @@ class Transactions extends React.Component{
  			<NavBar/>
  			<TrasactionList/>
  			<Footer/>
+			{this.RedirectToLoginPage()}
  		</Fragment>
  		)
  }

@@ -242,7 +242,14 @@ class ProductList extends React.Component{
                 name: 'Delete',
                 selector: 'id',
                 sortable: false,
-                cell: row => <button onClick={this.deleteIconOnClick.bind(this,row.id)}  className="btn text-danger"><i className="fa fa-trash-alt"/></button>
+                cell: row => <button onClick={()=>{
+                    if(window.confirm('Do you want to delete this product?'))
+                    {
+                          this.deleteIconOnClick(row.id)
+                    }
+                } 
+            }
+                     className="btn text-danger"><i className="fa fa-trash-alt"/></button>
             },
             {
                 name: 'Edit',

@@ -2,16 +2,17 @@ import React, {Component, Fragment} from 'react';
 import {Form, Button, Container, Row, Col} from 'react-bootstrap';
 import cogoToast from 'cogo-toast';
 import {Link} from "react-router-dom";
-import {Redirect} from "react-router";
+import {Redirect} from 'react-router-dom';
 import Axios from 'axios';
 
 class Login extends React.Component{
 	constructor(){
 		super()
 		this.state = {
-			username : '',
-			password : '',
+			username : 'anwar7736',
+			password : '123',
 			isChecked : true,
+			redirectStatus : false,
 		}
 	}
 componentDidMount(){
@@ -51,6 +52,7 @@ Login=(e)=>{
                     if(response.status==200 && response.data[0]==='admin')
                     {
                          localStorage.setItem('login', true);
+						 localStorage.setItem('current_user', username);
                          localStorage.setItem('seller', response.data[1]);
                          localStorage.setItem('admin', true);
                          if(this.state.isChecked==true)
@@ -68,11 +70,12 @@ Login=(e)=>{
 								localStorage.removeItem('pass');	
 							}
                          }
-                        
+                        this.setState({redirectStatus : true});
                     }
                     else if (response.status==200 && response.data[0]==='worker')
                     {
                     	localStorage.setItem('login', true);
+						localStorage.setItem('current_user', username);
                     	localStorage.setItem('seller', response.data[1]);
                          localStorage.setItem('worker', true);
                          if(this.state.isChecked==true)
@@ -90,8 +93,11 @@ Login=(e)=>{
 							localStorage.removeItem('pass');	
 						}
                          }
-                       
+						 
+						 this.setState({redirectStatus : true});
                     }
+
+
                     else{
                          cogoToast.error(response.data);
                     }
@@ -115,6 +121,16 @@ passwordShowHide=()=>{
 		btnText.innerHTML = '<i class="fa fa-eye"/> Show Password';
 	}
 }
+
+RedirectToHomePage=()=>{
+	if(this.state.redirectStatus==true)
+	{
+		return (
+				<Redirect to="/" />
+				);
+	}
+}
+
  render(){
 
  	return(
@@ -147,6 +163,7 @@ passwordShowHide=()=>{
 						   
 					</Form>
  			</Container>
+			 {this.RedirectToHomePage()}
  		</Fragment>
  		)
  	

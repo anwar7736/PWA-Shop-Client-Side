@@ -15,6 +15,7 @@ import CurrentStockReport from '../pages/currentStock';
 import StockReceivedReport from '../pages/stockReceivedReport';
 import StockDecreaseReport from '../pages/stockDecreaseReport';
 import SalesReport from '../pages/reports';
+import ChangePassword from '../pages/ChangePassword';
 
 class Routes extends React.Component{
  render() {
@@ -35,6 +36,7 @@ class Routes extends React.Component{
                 <Route exact path="/stockReceivedReport" render={(props)=> <StockReceivedReport {...props} key={ Date.now() } />} />
                 <Route exact path="/stockDecreaseReport" render={(props)=> <StockDecreaseReport {...props} key={ Date.now() } />} />
                 <Route exact path="/salesReport" render={(props)=> <SalesReport {...props} key={ Date.now() } />} />
+                <Route exact path="/change_password" render={(props)=> <ChangePassword {...props} key={ Date.now() } />} />
        
         </Fragment>
     );

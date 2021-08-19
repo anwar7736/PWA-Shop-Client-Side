@@ -9,90 +9,48 @@ class Email extends React.Component{
 	constructor(){
 		super()
 		this.state = {
-			username : '',
+			email : '',
 			password : '',
 			isChecked : true,
+			redirectStatus : false,
+			verifyBtn : 'Verify Email',
+			isDisabled : false,
 		}
 	}
-componentDidMount(){
-	let user = localStorage.getItem('user');
-	let pass = localStorage.getItem('pass')
-	if(user!==null && pass!==null)
-	{
-		this.setState({username : user, password : pass, isChecked : true});
-	}
-}
-RememberOnChange=()=>{
-	if(this.state.isChecked==false)
-	{
-		this.setState({isChecked : true});
-	}
-	else
-	{
-		this.setState({isChecked : false});
-	}
-}
 
-Login=(e)=>{
+EmailVerify=(e)=>{
 	e.preventDefault();
-	let username = this.state.username;
-	let password = this.state.password;
-	if(username=='')
+	let email = this.state.email;
+	let EmailRegx= /^[a-zA-Z0-9]+@+[a-zA-Z0-9]+.+[A-z]/;
+	if(email=='')
 	{
-		 cogoToast.warn('Username Field is Required!')
+		 cogoToast.warn('Email Address Field is Required!');
 	}
-	else if(password=='')
+	else if(!EmailRegx.test(email))
 	{
-		 cogoToast.warn('Password Field is Required!')
+		cogoToast.error('Invalid Email Address!');
 	}
 	else{
-		Axios.post('https://api.coderanwar.com/api/login', {username:username, password:password})
+		this.setState({verifyBtn : 'Verifying....', isDisabled : true});
+		Axios.post('https://api.coderanwar.com/api/EmailVerification', {email:email})
                  .then(response=>{
-                    if(response.status==200 && response.data[0]==='admin')
+                    if(response.status==200 && response.data=='1')
                     {
-                         localStorage.setItem('login', true);
-                         localStorage.setItem('seller', response.data[1]);
-                         localStorage.setItem('admin', true);
-                         if(this.state.isChecked==true)
-                         {
-                         	localStorage.setItem('user', this.state.username);
-                         	localStorage.setItem('pass', this.state.password);
-                         }
-                         else
-                         {
-                         	let user = localStorage.getItem('user');
-							let pass = localStorage.getItem('pass');
-							if(user!==null && pass!==null)
-							{
-								localStorage.removeItem('user');
-								localStorage.removeItem('pass');	
-							}
-                         }
-                        
+						this.setState({
+							verifyBtn : 'Verify Email',
+							email : '',
+							isDisabled : false, 
+						});
+						cogoToast.success('Please check your mail');
+                        localStorage.setItem('email_verified', email);
+						setTimeout(()=>{
+							this.setState({redirectStatus : true});
+						},1000)
                     }
-                    else if (response.status==200 && response.data[0]==='worker')
-                    {
-                    	localStorage.setItem('login', true);
-                    	localStorage.setItem('seller', response.data[1]);
-                         localStorage.setItem('worker', true);
-                         if(this.state.isChecked==true)
-                         {
-                         	localStorage.setItem('user', this.state.username);
-                         	localStorage.setItem('pass', this.state.password);
-                         }
-                         else
-                         {
-                         	let user = localStorage.getItem('user');
-						let pass = localStorage.getItem('pass');
-						if(user!==null && pass!==null)
-						{
-							localStorage.removeItem('user');
-							localStorage.removeItem('pass');	
-						}
-                         }
-                       
-                    }
-                    else{
+                   
+                    else if(response.status==200 && response.data==='Email address does not exists.'){
+						this.setState({verifyBtn : 'Verify Email', isDisabled : true});
+						this.setState({email : ''});
                          cogoToast.error(response.data);
                     }
                  })
@@ -101,18 +59,13 @@ Login=(e)=>{
                  })
 	}
 }
-passwordShowHide=()=>{
-	let input = document.getElementById("password");
-	let btnText = document.getElementById("showHideBtn");
-	if(input.type=="password")
+
+RedirectToOTPVerifyPage=()=>{
+	if(this.state.redirectStatus==true)
 	{
-		input.type = "text";
-		btnText.innerHTML = '<i class="fa fa-eye-slash"/> Hide Password';
-	}
-	else
-	{
-		input.type = "password";
-		btnText.innerHTML = '<i class="fa fa-eye"/> Show Password';
+		return(
+				<Redirect to="/otp_verification" />
+			);
 	}
 }
  render(){
@@ -120,16 +73,17 @@ passwordShowHide=()=>{
  	return(
  		<Fragment>
  			<Container className="mt-4 col-lg-5 col-md-5 col-sm-8 col-xs-12">
- 						<Form onSubmit={this.Login}>
+					    <span id="count_down" className="d-none"></span>
+ 						<Form onSubmit={this.EmailVerify}>
  							<h2 className="text-center text-danger">Step 01 : Email Verification</h2>
 						  <Form.Group controlId="formBasicEmail">
 						    <Form.Label>Enter Email Address</Form.Label>
-						    <Form.Control value={this.state.username} onChange={(e)=>{this.setState({username:e.target.value})}} type="text" placeholder="Enter email address..." />
+						    <Form.Control value={this.state.email} onChange={(e)=>{this.setState({email:e.target.value})}} type="text" placeholder="Enter email address..." />
 						    <Form.Text className="text-muted">
 						    </Form.Text>
 						  </Form.Group>
-						  <Button variant="success" className="btn-block mb-2" type="submit">
-						    Verify Email	
+						  <Button variant="success" disabled={this.state.isDisabled} className="btn-block mb-2" type="submit">
+						   {this.state.verifyBtn}	
 						  </Button>
 						 	<Link to="/login">
 						    		<p className="forget-pass">Back to Login Page</p> 
@@ -137,6 +91,7 @@ passwordShowHide=()=>{
 						   
 					</Form>
  			</Container>
+			 {this.RedirectToOTPVerifyPage()}
  		</Fragment>
  		)
  	

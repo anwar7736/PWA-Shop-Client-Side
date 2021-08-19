@@ -44,6 +44,7 @@ class ReportList extends React.Component{
         }
         GetOrderDetails=(e)=>{
             let memo_no = e.target.value;
+            this.setState({selectedMemo : memo_no});
             Axios.get('https://api.coderanwar.com/api/GetOrderDetails/'+memo_no)
              .then(response=>{
                  this.setState({dataTable : response.data[0], total : response.data[1]});
@@ -79,16 +80,16 @@ class ReportList extends React.Component{
             this.setState({ showEdit:true})
         }
 
-        deleteIconOnClick=(id)=>{
-                    
-                    Axios.get('')
-                    .then(response=>{
-                        cogoToast.success('User has been deleted');
-                        this.componentDidMount();
-                    })
-                    .catch(error=>{
-
-                    })
+        deleteIconOnClick=(invoice_no)=>{
+              Axios.post('https://api.coderanwar.com/api/DeleteSalesInvoice', {invoice_no : invoice_no})
+              .then(res=>{
+                   cogoToast.success(invoice_no + ' Invoice has been deleted');
+                   this.componentDidMount();
+                  
+              })
+              .catch(err=>{
+                  cogoToast.error('Something went wrong!');
+              })
                     
                 
             
@@ -110,8 +111,26 @@ class ReportList extends React.Component{
         }
 
          print=()=>{
-            
            window.print();
+         }
+
+         deleteSalesMemo=()=>{
+             if(this.state.selectedMemo==='')
+             {
+                 cogoToast.info('Please choose memo no!');
+             }
+             else
+             {
+               Axios.post('https://api.coderanwar.com/api/DeleteSalesMemo', {memo_no : this.state.selectedMemo})
+               .then(res=>{
+                    cogoToast.success(this.state.selectedMemo + ' Memo has been deleted');
+                    this.componentDidMount();
+                    this.setState({selectedMemo : this.state.selectedMemo-1});
+               })
+               .catch(err=>{
+                   cogoToast.error('Something went wrong!');
+               })
+             }
          }
 
     render(){
@@ -158,13 +177,21 @@ class ReportList extends React.Component{
                 name: 'Delete',
                 selector: 'id',
                 sortable: false,
-                cell: row => <button onClick={this.deleteIconOnClick.bind(this,row.id)}  className="btn btn-sm text-danger"><i className="fa fa-trash-alt"/></button>
+                cell: row => <button onClick={()=>{
+                        if(window.confirm('Do you want to delete this invoice?'))
+                        {
+                            this.deleteIconOnClick(row.invoice_no);
+                        }
+
+                    }
+                }  
+                className="btn btn-sm text-danger"><i className="fa fa-trash-alt"/></button>
             },
             {
                 name: 'Edit',
                 selector: 'id',
                 sortable: false,
-                cell: row => <button onClick={this.editIconOnClick.bind(this,row.id)}  className="btn btn-sm text-success"><i className="fa fa-edit"/></button>
+                cell: row => <button disabled onClick={this.editIconOnClick.bind(this,row.id)}  className="btn btn-sm text-success"><i className="fa fa-edit"/></button>
             },
 
 
@@ -186,6 +213,7 @@ class ReportList extends React.Component{
                                 }
                             </select>
                                 <button onClick={this.print} className="btn btn-info btn-sm ml-3">Print Memo</button>
+                                <button onClick={this.deleteSalesMemo} className="btn btn-danger btn-sm ml-3">Delete Memo</button>
                         </div>
                         
                     </div>

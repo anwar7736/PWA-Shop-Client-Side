@@ -196,7 +196,14 @@ class UserList extends React.Component{
                 name: 'Delete',
                 selector: 'id',
                 sortable: false,
-                cell: row => <button onClick={this.deleteIconOnClick.bind(this,row.id)}  className="btn btn-sm text-danger"><i className="fa fa-trash-alt"/></button>
+                cell: row => <button onClick={()=>{
+                    if(window.confirm('Do you want to delete this user?')) 
+                    {
+                        this.deleteIconOnClick(row.id);
+                    }
+                   }
+                }
+                  className="btn btn-sm text-danger"><i className="fa fa-trash-alt"/></button>
             },
             {
                 name: 'Edit',
