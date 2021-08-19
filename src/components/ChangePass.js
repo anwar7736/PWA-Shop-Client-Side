@@ -83,9 +83,7 @@ ChangePassword=(e)=>{
  render(){
  	return(
  		<Fragment>
- 			<Container className="m-4">
- 				<Row>
- 					<Col lg={5} md={{span:4, offset:4}} sm={12}>
+ 			<div className="container mt-4 col-lg-5 col-md-5 col-sm-8 col-xs-12">
  						<Form onSubmit={this.ChangePassword}>
  								<h2 className="text-center text-danger">Change Password</h2>
 						  <Form.Group controlId="formBasicEmail">
@@ -109,9 +107,7 @@ ChangePassword=(e)=>{
 						    <p className="forget-pass">Back to Login</p> 
 						    </Link>
 						</Form>
- 					</Col>
- 				</Row>
- 			</Container>
+ 			</div>
  		</Fragment>
  		)
  	
