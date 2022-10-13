@@ -17,7 +17,7 @@ class TransactionList extends React.Component{
         }
     }
     componentDidMount(){
-         Axios.get('https://api.coderanwar.com/api/SelectCategory')
+         Axios.get('https://shop-api.coderanwar.online/api/SelectCategory')
          .then(response=>{
              this.setState({Categories : response.data});
          })
@@ -25,7 +25,7 @@ class TransactionList extends React.Component{
 
          }) 
 
-         Axios.get('https://api.coderanwar.com/api/SelectProduct')
+         Axios.get('https://shop-api.coderanwar.online/api/SelectProduct')
          .then(response=>{
              this.setState({Products : response.data});
          })
@@ -33,7 +33,7 @@ class TransactionList extends React.Component{
 
          }) 
 
-         Axios.get('https://api.coderanwar.com/api/CartList/'+1)
+         Axios.get('https://shop-api.coderanwar.online/api/CartList/'+1)
          .then(response=>{
              this.setState({Carts : response.data});
          })
@@ -41,7 +41,7 @@ class TransactionList extends React.Component{
 
          })
 
-         Axios.get('https://api.coderanwar.com/api/TotalOrderValue/'+1)
+         Axios.get('https://shop-api.coderanwar.online/api/TotalOrderValue/'+1)
          .then(response=>{
              this.setState({TotalOrderValue : response.data});
          })
@@ -50,7 +50,7 @@ class TransactionList extends React.Component{
          })
      }
      filterByCategory=(cat_name)=>{
-       Axios.get('https://api.coderanwar.com/api/SelectProductByCategory/'+cat_name)
+       Axios.get('https://shop-api.coderanwar.online/api/SelectProductByCategory/'+cat_name)
          .then(response=>{
              this.setState({Products : response.data});
          })
@@ -69,7 +69,7 @@ class TransactionList extends React.Component{
             myData.append('product_unit_price', price);
             myData.append('seller_name', seller);
             myData.append('product_icon', icon);
-           Axios.post('https://api.coderanwar.com/api/CartAdd',myData)
+           Axios.post('https://shop-api.coderanwar.online/api/CartAdd',myData)
                  .then(response=>{
                     if(response.status==200 && response.data==1)
                     {
@@ -86,7 +86,7 @@ class TransactionList extends React.Component{
      }
 
     cartItemPlus=(id)=>{
-        Axios.get('https://api.coderanwar.com/api/CartItemPlus/'+id)
+        Axios.get('https://shop-api.coderanwar.online/api/CartItemPlus/'+id)
          .then(response=>{
              this.componentDidMount();
              cogoToast.success('Quantity Increased Successfully')
@@ -97,7 +97,7 @@ class TransactionList extends React.Component{
     } 
 
     cartItemMinus=(id)=>{
-        Axios.get('https://api.coderanwar.com/api/CartItemMinus/'+id)
+        Axios.get('https://shop-api.coderanwar.online/api/CartItemMinus/'+id)
          .then(response=>{
              if(response.status==200 && response.data==1)
              {
@@ -114,7 +114,7 @@ class TransactionList extends React.Component{
     }
 
     cartItemRemove=(id)=>{
-        Axios.get('https://api.coderanwar.com/api/RemoveCartList/'+id)
+        Axios.get('https://shop-api.coderanwar.online/api/RemoveCartList/'+id)
          .then(response=>{
              this.componentDidMount();
              cogoToast.success('Item Removed Successfully')
@@ -126,7 +126,7 @@ class TransactionList extends React.Component{
     }   
 
     ConfirmSale=()=>{
-         Axios.get('https://api.coderanwar.com/api/ConfirmSale')
+         Axios.get('https://shop-api.coderanwar.online/api/ConfirmSale')
          .then(response=>{
              if(response.status===200 && response.data===1)
              {

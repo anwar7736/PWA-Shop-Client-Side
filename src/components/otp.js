@@ -27,7 +27,7 @@ componentDidMount(){
 	}
 
 	setInterval(this.countDown,1000); 
-	Axios.post('https://api.coderanwar.com/api/GetOTPExpiration', {email : email})
+	Axios.post('https://shop-api.coderanwar.online/api/GetOTPExpiration', {email : email})
 	.then(response=>{
 		if(response.data < 0)
 		{
@@ -94,7 +94,7 @@ OTPVerify=(e)=>{
 	MyForm.append('email', email);
 	MyForm.append('otp', otp);
 
-	Axios.post('https://api.coderanwar.com/api/OTPVerification', MyForm)
+	Axios.post('https://shop-api.coderanwar.online/api/OTPVerification', MyForm)
 	.then(response=>{
 		this.setState({verifyBtn : 'Verify OTP', isDisabled : true});
 		if(response.status==200 && response.data==1)

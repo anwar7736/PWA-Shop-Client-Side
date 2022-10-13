@@ -16,7 +16,7 @@ class CurrentStockList extends React.Component{
         }
     }
         componentDidMount(){
-         Axios.get('https://api.coderanwar.com/api/CurrentStockReport')
+         Axios.get('https://shop-api.coderanwar.online/api/CurrentStockReport')
          .then(response=>{
              this.setState({dataTable : response.data[0], total: response.data[1]});
          })

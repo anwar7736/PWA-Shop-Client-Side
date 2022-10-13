@@ -20,7 +20,7 @@ class ReportList extends React.Component{
         }
 
             componentDidMount=()=>{
-             Axios.get('https://api.coderanwar.com/api/TransactionList')
+             Axios.get('https://shop-api.coderanwar.online/api/TransactionList')
              .then(response=>{
                  this.setState({dataTable : response.data[0], total : response.data[1]});
              })
@@ -28,7 +28,7 @@ class ReportList extends React.Component{
 
              })
 
-             Axios.get('https://api.coderanwar.com/api/GetInvoiceList')
+             Axios.get('https://shop-api.coderanwar.online/api/GetInvoiceList')
              .then(response=>{
                  this.setState({MemoList : response.data});
              })
@@ -45,7 +45,7 @@ class ReportList extends React.Component{
         GetOrderDetails=(e)=>{
             let memo_no = e.target.value;
             this.setState({selectedMemo : memo_no});
-            Axios.get('https://api.coderanwar.com/api/GetOrderDetails/'+memo_no)
+            Axios.get('https://shop-api.coderanwar.online/api/GetOrderDetails/'+memo_no)
              .then(response=>{
                  this.setState({dataTable : response.data[0], total : response.data[1]});
              })
@@ -61,7 +61,7 @@ class ReportList extends React.Component{
              cogoToast.warn('Both dates are required!');
            }
            else{
-              Axios.post('https://api.coderanwar.com/api/TransactionListByDate', {from_date:from_date, to_date:to_date})
+              Axios.post('https://shop-api.coderanwar.online/api/TransactionListByDate', {from_date:from_date, to_date:to_date})
              .then(response=>{
                 this.setState({dataTable : response.data[0], total : response.data[1]});
              })
@@ -81,7 +81,7 @@ class ReportList extends React.Component{
         }
 
         deleteIconOnClick=(invoice_no)=>{
-              Axios.post('https://api.coderanwar.com/api/DeleteSalesInvoice', {invoice_no : invoice_no})
+              Axios.post('https://shop-api.coderanwar.online/api/DeleteSalesInvoice', {invoice_no : invoice_no})
               .then(res=>{
                    cogoToast.success(invoice_no + ' Invoice has been deleted');
                    this.componentDidMount();
@@ -121,7 +121,7 @@ class ReportList extends React.Component{
              }
              else
              {
-               Axios.post('https://api.coderanwar.com/api/DeleteSalesMemo', {memo_no : this.state.selectedMemo})
+               Axios.post('https://shop-api.coderanwar.online/api/DeleteSalesMemo', {memo_no : this.state.selectedMemo})
                .then(res=>{
                     cogoToast.success(this.state.selectedMemo + ' Memo has been deleted');
                     this.componentDidMount();

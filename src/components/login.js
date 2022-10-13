@@ -47,7 +47,7 @@ Login=(e)=>{
 		 cogoToast.warn('Password Field is Required!')
 	}
 	else{
-		Axios.post('https://api.coderanwar.com/api/login', {username:username, password:password})
+		Axios.post('https://shop-api.coderanwar.online/api/login', {username:username, password:password})
                  .then(response=>{
                     if(response.status==200 && response.data[0]==='admin')
                     {

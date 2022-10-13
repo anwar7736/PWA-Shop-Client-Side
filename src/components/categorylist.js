@@ -18,7 +18,7 @@ class CategoryList extends Component {
         }
     }
     componentDidMount(){
-         Axios.get('https://api.coderanwar.com/api/SelectCategory')
+         Axios.get('https://shop-api.coderanwar.online/api/SelectCategory')
          .then(response=>{
              this.setState({dataTable : response.data});
          })
@@ -48,7 +48,7 @@ class CategoryList extends Component {
             var myData = new FormData;
             myData.append('name', this.state.cat_name);
             myData.append('image', this.state.cat_img);
-           Axios.post('https://api.coderanwar.com/api/AddCategory',myData)
+           Axios.post('https://shop-api.coderanwar.online/api/AddCategory',myData)
                  .then(response=>{
                     if(response.status==200 && response.data==1)
                     {
@@ -78,7 +78,7 @@ class CategoryList extends Component {
             myData.append('name', this.state.cat_name);
             myData.append('image', this.state.cat_img);
             myData.append('cat_code', this.state.editID);
-            Axios.post('https://api.coderanwar.com/api/UpdateCategory',myData)
+            Axios.post('https://shop-api.coderanwar.online/api/UpdateCategory',myData)
                  .then(response=>{
                     if(response.status==200 && response.data==1)
                     {
@@ -116,7 +116,7 @@ class CategoryList extends Component {
 
     deleteIconOnClick=(id)=>{
 
-             Axios.get('https://api.coderanwar.com/api/DeleteCategory/'+id)
+             Axios.get('https://shop-api.coderanwar.online/api/DeleteCategory/'+id)
              .then(response=>{
                  cogoToast.success('Category has been deleted');
                  this.componentDidMount();
@@ -131,7 +131,7 @@ class CategoryList extends Component {
     editIconOnClick=(id)=>{
         this.handleOpenEdit();
         this.setState({editID:id})
-         Axios.get('https://api.coderanwar.com/api/getCategory/'+id)
+         Axios.get('https://shop-api.coderanwar.online/api/getCategory/'+id)
                  .then(response=>{
                          this.setState({cat_name: response.data.cat_name,cat_img: response.data.cat_icon
                         })

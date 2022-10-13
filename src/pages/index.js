@@ -26,7 +26,7 @@ class Index extends React.Component{
            
 
 
-         Axios.get('https://api.coderanwar.com/api/CountSummary')
+         Axios.get('https://shop-api.coderanwar.online/api/CountSummary')
          .then(response=>{
              this.setState({
                 transactions: response.data['transactions'].length,
@@ -38,14 +38,14 @@ class Index extends React.Component{
          .catch(error=>{
 
          }) 
-         Axios.get('https://api.coderanwar.com/api/RecentTransactionList')
+         Axios.get('https://shop-api.coderanwar.online/api/RecentTransactionList')
          .then(response=>{
              this.setState({dataTable : response.data});
          })
          .catch(error=>{
 
          })
-         Axios.get('https://api.coderanwar.com/api/IncomeLast7Days')
+         Axios.get('https://shop-api.coderanwar.online/api/IncomeLast7Days')
          .then(response=>{
              this.setState({dataChart : response.data});
          })

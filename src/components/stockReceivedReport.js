@@ -16,7 +16,7 @@ class StockReceivedList extends React.Component{
         }
     }
         componentDidMount=()=>{
-         Axios.get('https://api.coderanwar.com/api/ReceivedAllStockData')
+         Axios.get('https://shop-api.coderanwar.online/api/ReceivedAllStockData')
          .then(response=>{
              this.setState({dataTable : response.data[0], total: response.data[1]});
          })
@@ -39,7 +39,7 @@ class StockReceivedList extends React.Component{
              cogoToast.warn('Both dates are required!');
            }
            else{
-              Axios.post('https://api.coderanwar.com/api/ReportFilterByDate', {from_date:from_date, to_date:to_date})
+              Axios.post('https://shop-api.coderanwar.online/api/ReportFilterByDate', {from_date:from_date, to_date:to_date})
              .then(response=>{
                  this.setState({dataTable : response.data[0], total: response.data[1]});
              })

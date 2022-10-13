@@ -32,7 +32,7 @@ EmailVerify=(e)=>{
 	}
 	else{
 		this.setState({verifyBtn : 'Verifying....', isDisabled : true});
-		Axios.post('https://api.coderanwar.com/api/EmailVerification', {email:email})
+		Axios.post('https://shop-api.coderanwar.online/api/EmailVerification', {email:email})
                  .then(response=>{
                     if(response.status==200 && response.data=='1')
                     {

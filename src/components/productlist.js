@@ -22,14 +22,14 @@ class ProductList extends React.Component{
         }
     }
         componentDidMount(){
-         Axios.get('https://api.coderanwar.com/api/SelectProduct')
+         Axios.get('https://shop-api.coderanwar.online/api/SelectProduct')
          .then(response=>{
              this.setState({dataTable : response.data});
          })
          .catch(error=>{
 
          })
-         Axios.get('https://api.coderanwar.com/api/SelectCategory')
+         Axios.get('https://shop-api.coderanwar.online/api/SelectCategory')
          .then(response=>{
              this.setState({categories : response.data});
          })
@@ -80,7 +80,7 @@ class ProductList extends React.Component{
             myData.append('product_price', this.state.product_price);
             myData.append('product_remarks', this.state.product_remarks);
             myData.append('product_category', this.state.selected_category);
-            Axios.post('https://api.coderanwar.com/api/AddProduct',myData)
+            Axios.post('https://shop-api.coderanwar.online/api/AddProduct',myData)
                  .then(response=>{
                     if(response.status==200 && response.data==1)
                     {
@@ -125,7 +125,7 @@ class ProductList extends React.Component{
             myData.append('product_remarks', this.state.product_remarks);
             myData.append('product_category', this.state.selected_category);
             myData.append('id', this.state.editID);
-            Axios.post('https://api.coderanwar.com/api/UpdateProduct',myData)
+            Axios.post('https://shop-api.coderanwar.online/api/UpdateProduct',myData)
             .then(response=>{
                     if(response.status==200 && response.data==1)
                     {
@@ -167,7 +167,7 @@ class ProductList extends React.Component{
 
     deleteIconOnClick=(id)=>{
 
-             Axios.get('https://api.coderanwar.com/api/DeleteProduct/'+id)
+             Axios.get('https://shop-api.coderanwar.online/api/DeleteProduct/'+id)
              .then(response=>{
                  cogoToast.success('Product has been deleted');
                  this.componentDidMount();
@@ -181,7 +181,7 @@ class ProductList extends React.Component{
     editIconOnClick=(id)=>{
         this.handleOpenEdit();
         this.setState({editID:id})
-        Axios.get('https://api.coderanwar.com/api/getProduct/'+id)
+        Axios.get('https://shop-api.coderanwar.online/api/getProduct/'+id)
         .then(response=>{
            this.setState({
             product_name: response.data.product_name,

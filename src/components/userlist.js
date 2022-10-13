@@ -23,7 +23,7 @@ class UserList extends React.Component{
         }
     }
     componentDidMount(){
-         Axios.get('https://api.coderanwar.com/api/SelectUser')
+         Axios.get('https://shop-api.coderanwar.online/api/SelectUser')
          .then(response=>{
              this.setState({dataTable : response.data});
          })
@@ -61,7 +61,7 @@ class UserList extends React.Component{
             cogoToast.warn('Password Field is Required!')
         }
         else if(this.state.editID==''){
-           Axios.post('https://api.coderanwar.com/api/AddUser', 
+           Axios.post('https://shop-api.coderanwar.online/api/AddUser', 
             {
                 name:this.state.fname,
                 username:this.state.uname,
@@ -89,7 +89,7 @@ class UserList extends React.Component{
         }
         else
         {
-             Axios.post('https://api.coderanwar.com/api/UpdateUser', {
+             Axios.post('https://shop-api.coderanwar.online/api/UpdateUser', {
                 id:this.state.editID,
                 name:this.state.fname,
                 username:this.state.uname,
@@ -138,7 +138,7 @@ class UserList extends React.Component{
 
     deleteIconOnClick=(id)=>{
                 
-                 Axios.get('https://api.coderanwar.com/api/DeleteUser/'+id)
+                 Axios.get('https://shop-api.coderanwar.online/api/DeleteUser/'+id)
                  .then(response=>{
                      cogoToast.success('User has been deleted');
                      this.componentDidMount();
@@ -154,7 +154,7 @@ class UserList extends React.Component{
     editIconOnClick=(id)=>{
        this.handleOpenEdit();
        this.setState({editID:id})
-       Axios.get('https://api.coderanwar.com/api/getUser/'+id)
+       Axios.get('https://shop-api.coderanwar.online/api/getUser/'+id)
                  .then(response=>{
                          this.setState({
                             fname: response.data.fullname,

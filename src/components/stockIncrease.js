@@ -15,7 +15,7 @@ class StockIncrease extends React.Component{
         }
     }
         componentDidMount(){
-         Axios.get('https://api.coderanwar.com/api/CurrentStockReport')
+         Axios.get('https://shop-api.coderanwar.online/api/CurrentStockReport')
          .then(response=>{
              this.setState({dataTable : response.data[0]});
          })
@@ -40,7 +40,7 @@ class StockIncrease extends React.Component{
                 myData.append('product_unit_price', product_price);
                 myData.append('product_qty', this.state.product_qty);
                 myData.append('product_icon', product_icon);
-             Axios.post('https://api.coderanwar.com/api/StockReceived',myData)
+             Axios.post('https://shop-api.coderanwar.online/api/StockReceived',myData)
             .then(response=>{
               if(response.status===200)
                     {

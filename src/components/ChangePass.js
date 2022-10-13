@@ -52,7 +52,7 @@ ChangePassword=(e)=>{
 		let MyForm = new FormData();
 		MyForm.append('username', username);
 		MyForm.append('newpass', new_pass);
-		Axios.post('https://api.coderanwar.com/api/ChangePassword', MyForm)
+		Axios.post('https://shop-api.coderanwar.online/api/ChangePassword', MyForm)
                  .then(response=>{
                    if(response.status===200 && response.data===1)
                    {

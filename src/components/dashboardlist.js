@@ -16,7 +16,7 @@ class DashboardList extends React.Component{
     }
   }
   componentDidMount(){
-         Axios.get('https://api.coderanwar.com/api/SelectUser')
+         Axios.get('https://shop-api.coderanwar.online/api/SelectUser')
          .then(response=>{
              this.setState({dataTable : response.data});
          })
